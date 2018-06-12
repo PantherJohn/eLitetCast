@@ -13,7 +13,7 @@
 	letter-spacing: -1.0pt;
 	margin-top: 0in;
 	margin-bottom: 0in;
-	color:whitesmoke;
+	color: whitesmoke;
 }
 h1 {
 	font-size: 28.0pt;
@@ -21,14 +21,21 @@ h1 {
 	font-weight: normal;
 	margin-top: 0in;
 	margin-bottom: 0in;
-		color:whitesmoke;
-
+	color: whitesmoke;
 }
 .exhibit {
 	position: fixed;
 	top: 50%;
 	margin-left: 1.5in;
 	transform: translateY(-50%);
+}
+.footbar {
+	font-family: "Rockwell";
+	font-size: 14.0pt;
+	color: whitesmoke;
+	position: fixed;
+	margin-left: 1.5in;
+	bottom: 0;
 }
 .button {
 	background-color: indianred;
@@ -49,7 +56,6 @@ h1 {
 }
 .launch:hover {
 	background-color: red;
-	//opacity: 0.6;
 }
 #branding {
 	position: fixed;
@@ -58,21 +64,29 @@ h1 {
 	min-width: 100%;
 	min-height: 100%;
 	filter: brightness(70%);
+	background-color: black;
+}
+.references {
+	text-decoration: none;
+	color: whitesmoke;
 }
 </style>
 <body>
-<video src="jellybean/branding.mp4" oncontextmenu="return false;" autoplay muted loop id="branding"></video>
+<video src="jellybean/branding.mp4" oncontextmenu="return false;" id="branding" autoplay muted loop></video>
 <div class="exhibit">
   <p class="title"><u>One</u> Number Away</p>
   <h1>Headstart on livestream</h1>
-  <h1>
+  <p>
     <button class="button launch" id="mainStart">LAUNCH</button>
-  </h1>
+  </p>
+</div>
+<div class="footbar">
+  <p class="references">&copy; eLitet Cast&nbsp;&nbsp;&nbsp; <a href="#" class="references">SERVICES | </a> <a href="#" class="references">BRANDING | </a> <a href="#" class="references">FAQ</a> </p>
 </div>
 </body>
 <script>
 	document.getElementById("mainStart").addEventListener("click",function(){
-			window.location = "#";
-		});
-	</script>
+		window.location = "#";
+	});
+</script>
 </html>
