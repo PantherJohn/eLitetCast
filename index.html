@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<!--<base href="../">-->
+<head>
+<meta charset="utf-8">
+<title>eLitet Cast</title>
+</head>
+<style>
+.title {
+	font-family: "Century Gothic";
+	font-size: 48pt;
+	font-weight: bold;
+	letter-spacing: -1.0pt;
+	margin-top: 0in;
+	margin-bottom: 0in;
+	color:whitesmoke;
+}
+h1 {
+	font-size: 28.0pt;
+	font-family: "Rockwell";
+	font-weight: normal;
+	margin-top: 0in;
+	margin-bottom: 0in;
+		color:whitesmoke;
+
+}
+.exhibit {
+	position: fixed;
+	top: 50%;
+	margin-left: 1.5in;
+	transform: translateY(-50%);
+}
+.button {
+	background-color: indianred;
+	border: none;
+	color: whitesmoke;
+	padding: 10px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: auto;
+	-webkit-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	font-family: "Century Gothic";
+	font-weight: bold;
+	margin-top: 10pt;
+}
+.launch:hover {
+	background-color: red;
+	//opacity: 0.6;
+}
+#branding {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	min-width: 100%;
+	min-height: 100%;
+	filter: brightness(70%);
+}
+</style>
+<body>
+<video src="jellybean/branding.mp4" oncontextmenu="return false;" autoplay muted loop id="branding"></video>
+<div class="exhibit">
+  <p class="title"><u>One</u> Number Away</p>
+  <h1>Headstart on livestream</h1>
+  <h1>
+    <button class="button launch" id="mainStart">LAUNCH</button>
+  </h1>
+</div>
+</body>
+<script>
+	document.getElementById("mainStart").addEventListener("click",function(){
+			window.location = "#";
+		});
+	</script>
+</html>
