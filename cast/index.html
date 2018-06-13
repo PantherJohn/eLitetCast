@@ -43,17 +43,19 @@ var channel = 1;
 var queue = [];
 var titleset = [];
 var video = document.getElementById('video');
+	
+function jimmyParser()
+{
+	if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200)
+		return JSON.parse(xhr.responseText);
+	else 
+		return jimmyParser();
+}
 
 function wickJSON(path)
 {
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function()
-    {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        	return JSON.parse(xhr.responseText);
-        }
-		return JSON.parse("");
-    };
+    xhr.onreadystatechange = jimmyParser();
     xhr.open("GET", path, true);
     xhr.send();
 }
