@@ -1,29 +1,84 @@
 <!DOCTYPE html>
 <html>
+<base href="../">
+<title>eLitet Cast Live</title>
 <head>
-  <script src="hls.min.js"></script>
-  <style>
-    body{
-      background-color:black;
-    }
-    #video{
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      left: 0px;
-      margin: auto;
-      max-height: 100%;
-      max-width: 100%;
-    }
-  </style>
+<script src="jellybean/hls.min.js"></script>
+<style>
+body {
+	background-color: black;
+}
+#video {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	margin: auto;
+	max-height: 100%;
+	max-width: 100%;
+}
+</style>
 </head>
 <body>
-  <video id="video" style="width: 100%; height: 100%;" controls></video>
-  <script src="player.js">
-        Object.defineProperty(window.navigator, 'userAgent', {
-        get: function () { return 'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1'; }
-      });
-  </script>
+<video id="video" style="width: 100%; height: 100%;" controls></video>
+<script>
+var channel = 1;
+var queue = [];
+var video = document.getElementById('video');
+
+
+
+function wickJSON(path)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function()
+    {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        	return JSON.parse(xhr.responseText);
+        }
+		return JSON.parse("");
+    };
+    xhr.open("GET", path, true);
+    xhr.send();
+}
+
+function init()
+{
+	//var feed = wickJSON("jellybean/feed.json").feed;
+	var feed = JSON.parse('{"feed":[{"MSNBC":"https://tvemsnbc-lh.akamaihd.net/i/nbcmsnbc_1@122532/index_4296_av-b.m3u8?sd=10&rebase=on"},{"FOX News":"https://fncgohls-i.akamaihd.net/hls/live/263399/FNCGOHLSv2/Fox_News_v2_VIDEO_0_2564000.m3u8"},{"CBS News":"https://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/index_2200_av-b.m3u8?sd=10&rebase=on"},{"Bloomberg":"https://liveproduseast.global.ssl.fastly.net/us/Channel-USTV-AWS-virginia-1/Source-USTV-1000-1_live.m3u8"}]}');
+
+	for (var entry in feed){
+		var title = Object.keys(entry)[0];
+		alert (title);
+		var rqsdURI = entry[title];
+		var hls = new Hls();
+		var m3u8Url = decodeURIComponent(rqsdURI);
+		hls.loadSource(m3u8Url);
+		hls.startFragPrefetch = true;
+		queue.push(hls);
+	}
+	
+	window.onkeyup = function(e) {
+		var prev = channel;
+		var key = e.keyCode ? e.keyCode : e.which;
+		// ADD OVERFLOW CONTROL
+		if (key == 37 || key == 38) {
+			channel++;
+		} else if (key == 39 || key == 40) {
+			channel--;
+		}
+		// Popup Channel
+		queue[prev].detachMedia();
+		queue[channel-1].attachMedia(video);
+		queue[channel-1].on(Hls.Events.MANIFEST_PARSED, function() {
+			video.play();
+		});
+	}
+}
+
+init();
+	
+</script>
 </body>
 </html>
