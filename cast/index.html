@@ -8,22 +8,9 @@
 body {
 	background-color: black;
 }
-#video {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	margin: auto;
-	max-height: 100%;
-	max-width: 100%;
-	width: 100%; 
-	height: 100%;
-	z-index: -1;
-}
 #alert {
     padding: 20px;
-    background-color: #f44336; /* Red */
+    background-color: #f44336;
 	font-family: "Century Gothic";
 	font-size: 48pt;
 	font-weight: 700;
@@ -36,18 +23,26 @@ body {
 </head>
 <body>
 <div id="alert"></div>
-<video id="video" autoplay></video>
 <script>
 	
 var channel = 1;
 var queue = [];
 var titleset = [];
-var video = document.getElementById('video');
+var optimizdq = [];
+var debug = false;
+
+function denounce(castid)
+{
+	optimizdq[castid-1].muted = true;
+	optimizdq[castid-1].style.display = "none";
+}	
 
 function announce(castid)
 {
 	var channeld = castid;
 	var title = titleset[castid-1];
+	optimizdq[channeld-1].muted = false;
+	optimizdq[channeld-1].style.display = "block";
 	var div = document.getElementById("alert");
 	div.innerHTML = channeld+" "+title;
 	div.style.display = "block";
@@ -56,11 +51,11 @@ function announce(castid)
 	
 function init(xhr)
 {
-	var feed = JSON.parse(xhr.responseText).feed;
+	if (!debug)
+		var feed = JSON.parse(xhr.responseText).feed;
+	else
+		var feed = JSON.parse('{"feed":[{"MSNBC":"https://tvemsnbc-lh.akamaihd.net/i/nbcmsnbc_1@122532/index_4296_av-b.m3u8?sd=10&rebase=on"},{"FOX News":"https://fncgohls-i.akamaihd.net/hls/live/263399/FNCGOHLSv2/Fox_News_v2_VIDEO_0_2564000.m3u8"},{"CBS News":"https://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/index_2200_av-b.m3u8?sd=10&rebase=on"},{"Bloomberg":"https://liveproduseast.global.ssl.fastly.net/us/Channel-USTV-AWS-virginia-1/Source-USTV-1000-1_live.m3u8"}]}').feed;
 	
-	/*
-	var feed = JSON.parse('{"feed":[{"MSNBC":"https://tvemsnbc-lh.akamaihd.net/i/nbcmsnbc_1@122532/index_4296_av-b.m3u8?sd=10&rebase=on"},{"FOX News":"https://fncgohls-i.akamaihd.net/hls/live/263399/FNCGOHLSv2/Fox_News_v2_VIDEO_0_2564000.m3u8"},{"CBS News":"https://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/index_2200_av-b.m3u8?sd=10&rebase=on"},{"Bloomberg":"https://liveproduseast.global.ssl.fastly.net/us/Channel-USTV-AWS-virginia-1/Source-USTV-1000-1_live.m3u8"}]}').feed;
-	*/
 
 	for (entry in feed) {
 		var eacha = feed[entry];
@@ -68,18 +63,24 @@ function init(xhr)
 		var rqsdURI = eacha[title];
 		var hls = new Hls();
 		var m3u8Url = decodeURIComponent(rqsdURI);
+		var anxView = document.createElement("video");
+		anxView.muted = true;
+		anxView.autoplay = true;
 		hls.loadSource(m3u8Url);
 		hls.startFragPrefetch = true;
+		hls.attachMedia(anxView);
+		document.body.appendChild(anxView);
+		anxView.style.cssText = "position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; margin: auto; max-height: 100%; max-width: 100%; width: 100%; height: 100%; z-index: -1; display: none;";
+		anxView.play();
 		queue.push(hls);
+		optimizdq.push(anxView);
 		titleset.push(title);
 	}
 	
-	queue[0].attachMedia(video);
-	queue[0].on(Hls.Events.MANIFEST_PARSED, function() {
-		video.play();
-	});
+	announce(1);
 	
 	window.onkeyup = function(e) {
+		denounce(1);
 		var prev = channel;
 		var key = e.keyCode ? e.keyCode : e.which;
 		if (key == 39 || key == 40) {
@@ -91,21 +92,23 @@ function init(xhr)
 			if (channel < 1) 
 				channel = 1;
 		}
+		denounce(prev);
 		announce(channel);
-		queue[channel-1].attachMedia(video);
-		queue[channel-1].on(Hls.Events.MANIFEST_PARSED, function() {
-			video.play();
-		});
 	}
 }
 
 	var estate = "jellybean/feed.json";
 	var xhr = new XMLHttpRequest();
-	xhr.onload = function() {
+	
+	if (debug) 
 		init(xhr);
-	};
-	xhr.open("GET", estate, true);
-	xhr.send();
+	else {
+		xhr.onload = function() {
+			init(xhr);
+		};
+		xhr.open("GET", estate, true);
+		xhr.send();
+	}
 	
 </script>
 </body>
