@@ -30,6 +30,19 @@ var queue = [];
 var titleset = [];
 var optimizdq = [];
 var debug = false;
+var estateFeed = "jellybean/feed.json";
+
+function wickJSON(estate) {
+	var resp = '';
+	var xmlHttp = new XMLHttpRequest();
+	if(xmlHttp != null)
+	{
+		xmlHttp.open("GET", estate, false);
+		xmlHttp.send(null);
+		resp = xmlHttp.responseText;
+	}
+	return JSON.parse(resp);
+}	
 
 function denounce(castid)
 {
@@ -49,14 +62,13 @@ function announce(castid)
 	setTimeout(function(){ div.style.display = "none"; }, 800);
 }
 	
-function init(xhr)
+function init()
 {
 	if (!debug)
-		var feed = JSON.parse(xhr.responseText).feed;
+		var feed = wickJSON(estateFeed).feed;
 	else
-		var feed = JSON.parse('{"feed":[{"MSNBC":"https://tvemsnbc-lh.akamaihd.net/i/nbcmsnbc_1@122532/index_4296_av-b.m3u8?sd=10&rebase=on"},{"FOX News":"https://fncgohls-i.akamaihd.net/hls/live/263399/FNCGOHLSv2/Fox_News_v2_VIDEO_0_2564000.m3u8"},{"CBS News":"https://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/index_2200_av-b.m3u8?sd=10&rebase=on"},{"Bloomberg":"https://liveproduseast.global.ssl.fastly.net/us/Channel-USTV-AWS-virginia-1/Source-USTV-1000-1_live.m3u8"}]}').feed;
+		var feed = JSON.parse('{"feed":[{"CBS News":"https://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/index_2200_av-b.m3u8?sd=10&rebase=on"},{"Bloomberg":"https://liveproduseast.global.ssl.fastly.net/us/Channel-USTV-AWS-virginia-1/Source-USTV-1000-1_live.m3u8"},{"WNYW":"https://player-api.new.livestream.com/accounts/6372917/events/2592483/stream_info"}]}').feed;
 	
-
 	for (entry in feed) {
 		var eacha = feed[entry];
 		var title = (Object.keys(eacha))[0];
@@ -65,7 +77,13 @@ function init(xhr)
 		var m3u8Url = decodeURIComponent(rqsdURI);
 		var anxView = document.createElement("video");
 		anxView.muted = true;
-		anxView.autoplay = true;
+		//anxView.autoplay = true;
+		
+		// - Livesteam API
+		if (m3u8Url.indexOf("livestream.com")!=-1 && 
+		   	m3u8Url.indexOf(".m3u8")==-1)
+			m3u8Url = wickJSON(m3u8Url).secure_m3u8_url;
+		
 		hls.loadSource(m3u8Url);
 		hls.startFragPrefetch = true;
 		hls.attachMedia(anxView);
@@ -97,18 +115,7 @@ function init(xhr)
 	}
 }
 
-	var estate = "jellybean/feed.json";
-	var xhr = new XMLHttpRequest();
-	
-	if (debug) 
-		init(xhr);
-	else {
-		xhr.onload = function() {
-			init(xhr);
-		};
-		xhr.open("GET", estate, true);
-		xhr.send();
-	}
+	init();
 	
 </script>
 </body>
