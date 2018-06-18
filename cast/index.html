@@ -84,7 +84,7 @@ function init()
 		if (m3u8Url.indexOf("livestream.com")!=-1 && 
 		   	m3u8Url.indexOf(".m3u8")==-1) {
 			if (bypass)
-				m3u8Url += "https://cors-anywhere.herokuapp.com/";
+				m3u8Url =+ "https://cors-anywhere.herokuapp.com/";
 			m3u8Url = wickJSON(m3u8Url).secure_m3u8_url;
 		}
 		
