@@ -6,7 +6,7 @@
         {"Weather Channel":"http://weather-lh.akamaihd.net/i/twc_1@92006/index_2400_av-b.m3u8?sd=10&rebase=on"},
         {"California Music Channel":"http://cmctv.ios.internapcdn.net/cmctv_vitalstream_com/live_1/CMCUSA/CCURstream0.m3u8"},
         {"WNYW":"https://player-api.new.livestream.com/accounts/6372917/events/2592483/stream_info"},
-        {"NASA TV Public":"http://nasa-i.akamaihd.net/hls/live/253565/NASA-NTV1-Public/master_500.m3u8"},
+        {"NASA TV Public":"https://nasa-i.akamaihd.net/hls/live/253565/NASA-NTV1-Public/master_500.m3u8"},
         {"NASA TV Media":"https://nasa-i.akamaihd.net/hls/live/253566/NASA-NTV2-Media/master.m3u8"},
         {"MSNBC":"https://tvemsnbc-lh.akamaihd.net/i/nbcmsnbc_1@122532/index_4296_av-b.m3u8?sd=10&rebase=on"}, 
         {"FOX News":"https://fncgohls-i.akamaihd.net/hls/live/263399/FNCGOHLSv2/Fox_News_v2_VIDEO_0_2564000.m3u8"}
